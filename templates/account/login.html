@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock title %}
+
+{% block main %}
+<div
+  class="d-flex justify-content-center align-items-center"
+  style="height: 80vh"
+>
+  <form method="POST" class="container" style="width: min(100%, 620px)">
+    {% csrf_token %}
+
+    {% if errors %}
+    <div class="errors-container">
+      {% for error in errors.values %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Username input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="id_username">Username</label>
+      <input
+        type="text"
+        id="id_username"
+        name="username"
+        class="form-control"
+        autofocus=""
+        autocapitalize="none"
+        autocomplete="username"
+        maxlength="150"
+        required
+      />
+    </div>
+
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="id_password">Password</label>
+      <input
+        id="id_password"
+        type="password"
+        name="password"
+        class="form-control"
+        autocomplete="password"
+        required
+      />
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4">
+      Sign in
+    </button>
+  </form>
+</div>
+{% endblock main %}

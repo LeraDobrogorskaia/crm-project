@@ -158,7 +158,7 @@ class Order(models.Model):
         _('reject message'),
         max_length=250,
         blank=True,
-        default=True,
+        default='',
         help_text=_(
             'Must be specified if the order is rejected by the manager.',
         ),

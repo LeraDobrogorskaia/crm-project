@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="container">
+  <form method="POST">
+    {% csrf_token%}
+
+    {% if errors %}
+    <div class="errors-container">
+      {% for key, error in errors.items %}
+      <div class="alert alert-danger" role="alert">
+        <strong>{{key|capfirst}}</strong>
+        {{ error }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <input
+      type="hidden"
+      name="client"
+      id="id_client"
+      value="{{ request.user.pk }}"
+    />
+    <input
+      type="hidden"
+      name="is_confirmed"
+      id="id_is_confirmed"
+      value="{% if confirm %}1{% else %}{% endif %}"
+    />
+
+    {% if confirm %}
+    <input type="hidden" name="color" value="{{ form.cleaned_data.color.id }}" />
+    <input type="hidden" name="size" value="{{ form.cleaned_data.size.id }}" />
+    <input type="hidden" name="material" value="{{ form.cleaned_data.material.id }}" />
+    {% endif %}
+
+    <div class="container px-0">
+      <p>1. Choose your preferred color.</p>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="id_color">Color</label>
+        </div>
+
+        <select
+          class="form-select"
+          name="color"
+          id="id_color"
+          required
+          {% if confirm %}disabled{% endif %}
+        >
+          <option>Choose...</option>
+          {% for color in colors %}
+          <option
+            value="{{ color.id }}"
+            {% if color == form.cleaned_data.color %}
+            selected
+            {% endif %}
+          >
+            {{ color }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="container px-0">
+      <p>2. Choose preferred sepulka size.</p>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="id_size">Size</label>
+        </div>
+
+        <select
+          class="form-select"
+          name="size"
+          id="id_size"
+          required
+          {% if confirm %}disabled{% endif %}
+        >
+          <option>Choose...</option>
+          {% for size in sizes %}
+          <option
+            value="{{ size.id }}"
+            {% if size == form.cleaned_data.size %}
+            selected
+            {% endif %}
+          >
+            {{ size }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="container px-0">
+      <p>3. Choose your preferred material.</p>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="id_material">Material</label>
+        </div>
+
+        <select
+          class="form-select"
+          name="material"
+          id="id_material"
+          required
+          {% if confirm %}disabled{% endif %}
+        >
+          <option>Choose...</option>
+          {% for material in materials %}
+          <option
+            value="{{ material.id }}"
+            {% if material == form.cleaned_data.material %}
+            selected
+            {% endif %}
+          >
+            {{ material }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    {% if confirm %}
+    <div class="container confirmation border-top border-bottom mb-3 pt-3">
+      <p><strong>Total weight:</strong> {{ confirm.weight }} kg.</p>
+      <p><strong>Total cost:</strong> {{ confirm.cost }} money.</p>
+    </div>
+    {% endif %}
+
+    {% if confirm %}
+    <a class="btn btn-danger" href="{% url 'sepulki-create' %}">Clear</a>
+    {% endif %}
+
+    <button type="submit" class="btn btn-success">
+      {% if confirm %} Create order {% else %} Count order cost {% endif %}
+    </button>
+  </form>
+</div>
+{% endblock main %}

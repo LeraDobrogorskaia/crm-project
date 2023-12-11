@@ -15,9 +15,10 @@ def login_view(request):
         if form.is_valid():
             user = form.user_cache
             login(request, user)
-            return HttpResponseRedirect(reverse_lazy("sepulki-list"))
+            return HttpResponseRedirect(
+                getattr(request.GET, 'next', reverse_lazy("sepulki-list")),
+            )
 
         context["errors"] = form.errors
 
     return render(request, "account/login.html", context=context)
-

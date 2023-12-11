@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div>
+    <p>
+        You have been logged out.
+    </p>
+    <p>Go to <a href="{% url 'account-login' %}">login</a> view.</p>
+</div>
+{% endblock main %}

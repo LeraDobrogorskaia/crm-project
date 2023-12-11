@@ -75,13 +75,6 @@ class Material(SepulkaProperty):
         return f'{self.name} [{self.density} kg/m3]'
 
 
-# class PropertiesSet(models.Model):
-#     on_property_delete = 
-
-#     class Meta:
-#         abstract = True
-
-
 class PreparedPropertiesSet(SepulkaProperty):
     color = models.ForeignKey(
         Color,
@@ -170,6 +163,25 @@ class Order(models.Model):
     class Meta:
         verbose_name = _('order')
         verbose_name_plural = _('orders')
+
+    @property
+    def weight(self):
+        return self.size.volume * self.material.density
+
+    @property
+    def total_cost(self):
+        return self.weight * self.material.cost
+
+    @property
+    def is_returned(self):
+        return bool(getattr(self, 'orderreturn', None))
+
+    @property
+    def can_be_returned(self):
+        return (
+            self.status == self.StatusChoice.DELIVERED
+            and not self.is_rejected
+        )
 
 
 class OrderReturn(models.Model):

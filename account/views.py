@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.urls import reverse_lazy
 
 from account.forms import AuthenticationForm
@@ -22,3 +22,8 @@ def login_view(request):
         context["errors"] = form.errors
 
     return render(request, "account/login.html", context=context)
+
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'account/logout.html')

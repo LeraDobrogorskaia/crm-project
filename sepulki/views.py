@@ -22,8 +22,10 @@ class OrderListView(ListView):
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         if not self.request.user.is_authenticated:
             return HttpResponseRedirect(
-                reverse_lazy('account-login'),
-                next=request.get_full_path(),
+                '%s?next=%s' % (
+                    reverse_lazy('account-login'),
+                    request.get_full_path(),
+                ),
             )
 
         return super().get(request, *args, **kwargs)
